@@ -1,6 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyTweetDeck</string>
 
+    <string name="app_name">MyTweetDeck</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="consumerKey">kMGgfuDQnaqPY2JIzvgO49nxJ</string>
+    <string name="consumerSecret">PqooPeiBb5qDhb4JbxT7hE0si6FUVWt2KH9aIxz7d0YhmmJGbt</string>
+    <string name="accessToken">15224533-4WktYltxZvQHNHL2tFHbJ3p92s3b7AkjGlmfgAEbi</string>
+    <string name="accessTokenSecret">GnRwTmaeHg3L3oyrrOQBxncpZOvbvYmrBZq7QYj65X1wh</string>
+    <string name="owner">klavergne</string>
+    <string name="ownerId">15224533</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="retweets">RETWEETS</string>
+    <string name="favorites">FAVORITES</string>
+    <string name="sample_username">\@klavergne</string>
+    <string name="sample_fullname">Kevin LaVergne</string>
+    <string name="sample_tweet">Excepteur pour-over occaecat squid biodiesel umami gastropub, nulla laborum salvia dreamcatcher fanny pack.</string>
+    <string name="time_date_separator"> - </string>
+    <string name="profile_pic_description">Profile picture</string>
+    <string name="sample_time_ago">5h</string>
+    <string name="send">Send</string>
+    <string name="new_tweet">New Tweet</string>
+
+    <string name="send_tweet_successful">Tweet sent successfully!</string>
+    <string name="send_tweet_unsuccessful">Tweet send failed!</string>
+
+    <string name="retweet_text">RT </string>
+
 </resources>
