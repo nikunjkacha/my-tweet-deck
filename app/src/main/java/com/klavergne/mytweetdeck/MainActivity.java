@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,12 +19,26 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements TweetListFragment.OnTweetSelectedListener, TweetFragment.OnFragmentInteractionListener, NewTweetFragment.OnFragmentInteractionListener, SendTweetTask.SendTweetsTaskCompleteListener {
+
+    static final Twitter twitter = TwitterFactory.getSingleton();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        twitter.setOAuthConsumer(getString(R.string.consumerKey), getString(R.string.consumerSecret));
+        twitter.setOAuthAccessToken(new AccessToken(getString(R.string.accessToken), getString(R.string.accessTokenSecret)));
+
+        if (savedInstanceState == null) {
+            TweetListFragment fragment = TweetListFragment.newInstance(twitter);
+            getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+        }
+
+        Intent intent = new Intent(this, BackgroundTweetUpdater.class);
+        intent.putExtra(BackgroundTweetUpdater.EXTRA_TWITTER, twitter);
+        startService(intent);
     }
 
     @Override
@@ -36,17 +49,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onTweetSelected(Status status) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        TweetFragment tweetFragment = (TweetFragment) getFragmentManager().findFragmentByTag(TweetFragment.FRAGMENT_TAG);
+
+        if (tweetFragment == null) {
+            // 1-pane view
+            tweetFragment = new TweetFragment();
+            Bundle args = new Bundle();
+            args.putSerializable(TweetFragment.ARG_TWEET, status);
+            tweetFragment.setArguments(args);
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.container, tweetFragment, TweetFragment.FRAGMENT_TAG);
+            transaction.addToBackStack(null);
+
+            transaction.commit();
+        } else {
+            // 2-pane view
+            tweetFragment.updateTweetView(status);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void startNewTweetFragment() {
+        NewTweetFragment fragment = (NewTweetFragment) getFragmentManager().findFragmentByTag(NewTweetFragment.FRAGMENT_TAG);
+
+        if (fragment == null) {
+            fragment = NewTweetFragment.newInstance(getString(R.string.owner), getString(R.string.sample_fullname), getString(R.string.ownerId), null);
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            transaction.replace(R.id.container, fragment, NewTweetFragment.FRAGMENT_TAG);
+            transaction.addToBackStack(null);
+
+            transaction.commit();
+        } else {
+            // TODO update the existing fragment
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // TODO implement this
+    }
+
+    @Override
+    public void sendTweet(String text) {
+        // TODO implement this
+        getFragmentManager().popBackStack();
+        new SendTweetTask(twitter, this).execute(text);
+    }
+
+    @Override
+    public void onSendTweetComplete(Boolean success) {
+        Toast.makeText(this, (success ? R.string.send_tweet_successful : R.string.send_tweet_unsuccessful), Toast.LENGTH_LONG).show();
     }
 }

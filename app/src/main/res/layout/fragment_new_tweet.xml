@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.klavergne.mytweetdeck.NewTweetFragment">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/statusProfilePic"
+        android:src="@android:drawable/ic_menu_send"
+        android:layout_marginRight="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="@string/sample_fullname"
+        android:id="@+id/newTweetUserFullName"
+        android:layout_gravity="end"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/statusProfilePic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:text="@string/sample_username"
+        android:id="@+id/newTweetUserName"
+        android:layout_gravity="start"
+        android:textColor="@android:color/secondary_text_dark"
+        android:layout_toEndOf="@id/statusProfilePic"
+        android:layout_below="@+id/newTweetUserFullName"
+        android:layout_alignStart="@+id/newTweetUserFullName"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/newTweetText"
+        android:layout_toEndOf="@+id/statusProfilePic"
+        android:layout_below="@+id/statusProfilePic"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/charsLeft"
+        android:textColor="@android:color/secondary_text_dark"
+        android:text="140"
+        android:layout_alignTop="@+id/newTweetUserFullName"
+        android:layout_alignEnd="@+id/newTweetText" />
+
+</RelativeLayout>
