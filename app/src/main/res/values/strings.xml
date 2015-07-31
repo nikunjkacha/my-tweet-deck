@@ -19,15 +19,31 @@
     <string name="sample_username">\@klavergne</string>
     <string name="sample_fullname">Kevin LaVergne</string>
     <string name="sample_tweet">Excepteur pour-over occaecat squid biodiesel umami gastropub, nulla laborum salvia dreamcatcher fanny pack.</string>
-    <string name="time_date_separator"> - </string>
+    <string name="time_date_separator"> at </string>
     <string name="profile_pic_description">Profile picture</string>
     <string name="sample_time_ago">5h</string>
     <string name="send">Send</string>
     <string name="new_tweet">New Tweet</string>
+    <string name="no_tweets">No Tweets</string>
 
     <string name="send_tweet_successful">Tweet sent successfully!</string>
     <string name="send_tweet_unsuccessful">Tweet send failed!</string>
 
     <string name="retweet_text">RT </string>
+    <string name="sample_favorites_count">1,500</string>
+    <string name="sample_retweets_count">1.2M</string>
+    <string name="favorite_failed">Favorite Failed!</string>
+    <string name="unfavorite_failed">Unfavorite Failed!</string>
+    <string name="retweet_failed">Retweet Failed!</string>
+
+    <!-- Log messages -->
+    <string name="log_got_tweets">Got %1$d tweets</string>
+    <string name="log_updating_tweets">Updater ran</string>
+    <string name="log_retweeting">Retweeting: %1$d</string>
+    <string name="log_favoriting_tweet">Favoriting: %1$d</string>
+    <string name="log_favorite_state_change">Changing favorite state to : %1$b for: %2$d</string>
+    <string name="log_inserted_tweets_into_db">Got %1$s tweets; inserted %2$s tweets into the database.</string>
+    <string name="log_db_insert_error">Error inserting into db</string>
+
 
 </resources>

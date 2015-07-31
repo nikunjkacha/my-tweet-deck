@@ -1,4 +1,4 @@
-package com.klavergne.mytweetdeck;
+package com.klavergne.mytweetdeck.tasks;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

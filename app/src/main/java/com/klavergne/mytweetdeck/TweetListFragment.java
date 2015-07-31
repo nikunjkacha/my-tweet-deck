@@ -14,11 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 
 import com.klavergne.mytweetdeck.db.DbHelper;
+import com.klavergne.mytweetdeck.tasks.GetTweetsTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ public class TweetListFragment extends ListFragment implements GetTweetsTask.Get
         }
 
         if (savedInstanceState == null) {
-            new GetTweetsTask(this).execute(twitter);
+            new GetTweetsTask(this, this.getActivity()).execute(twitter);
         }
 
         setHasOptionsMenu(true);
@@ -168,9 +168,9 @@ public class TweetListFragment extends ListFragment implements GetTweetsTask.Get
     }
 
     public interface OnTweetSelectedListener {
-        public void onTweetSelected(Status status);
+        void onTweetSelected(Status status);
 
-        public void startNewTweetFragment();
+        void startNewTweetFragment();
     }
 
     @Override
@@ -182,15 +182,6 @@ public class TweetListFragment extends ListFragment implements GetTweetsTask.Get
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        /*switch (id) {
-            case R.id.action_new_tweet:
-                startNewTweetFragment();
-                return true;
-            case R.id.action_settings:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }*/
         boolean result = false;
         if (id == R.id.action_new_tweet) {
             callback.startNewTweetFragment();

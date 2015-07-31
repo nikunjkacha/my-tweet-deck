@@ -1,17 +1,15 @@
 package com.klavergne.mytweetdeck;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.klavergne.mytweetdeck.services.BackgroundTweetUpdater;
+import com.klavergne.mytweetdeck.tasks.SendTweetTask;
 
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -58,6 +56,7 @@ public class MainActivity extends Activity implements TweetListFragment.OnTweetS
             tweetFragment = new TweetFragment();
             Bundle args = new Bundle();
             args.putSerializable(TweetFragment.ARG_TWEET, status);
+            args.putSerializable(TweetFragment.ARG_TWITTER, twitter);
             tweetFragment.setArguments(args);
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

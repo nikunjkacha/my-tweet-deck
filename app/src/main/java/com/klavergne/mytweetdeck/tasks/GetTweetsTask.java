@@ -1,7 +1,10 @@
-package com.klavergne.mytweetdeck;
+package com.klavergne.mytweetdeck.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.klavergne.mytweetdeck.R;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,9 +19,11 @@ import twitter4j.TwitterException;
 public class GetTweetsTask extends AsyncTask<Twitter, Void, List<Status>> {
 
     private GetTweetsTaskCompleteListener listener;
+    private Context context;
 
-    public GetTweetsTask(GetTweetsTaskCompleteListener listener) {
+    public GetTweetsTask(GetTweetsTaskCompleteListener listener, Context context) {
         this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -26,7 +31,7 @@ public class GetTweetsTask extends AsyncTask<Twitter, Void, List<Status>> {
         if (twitters[0] != null) {
             try {
                 final List<twitter4j.Status> timeline = twitters[0].getHomeTimeline();
-                Log.d(this.getClass().getSimpleName(), "Got " + timeline.size() + " tweets");
+                Log.d(this.getClass().getSimpleName(), context.getString(R.string.log_got_tweets, timeline.size()));
                 return timeline;
             } catch (TwitterException e) {
                 Log.e(this.getClass().getSimpleName(), "Error getting timeline: " + e.getLocalizedMessage(), e);

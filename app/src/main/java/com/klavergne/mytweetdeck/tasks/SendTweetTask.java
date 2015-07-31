@@ -1,4 +1,4 @@
-package com.klavergne.mytweetdeck;
+package com.klavergne.mytweetdeck.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -7,7 +7,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 /**
- * Created by e103705 on 11/5/2014.
+ * Created by Kevin LaVergne on 11/5/2014.
  */
 public class SendTweetTask extends AsyncTask<String, Void, Boolean> {
 

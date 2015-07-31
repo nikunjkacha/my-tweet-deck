@@ -2,4 +2,7 @@
 <resources>
     <color name="holo_red_light">@android:color/holo_red_light</color>
     <color name="secondary_text_dark">@android:color/secondary_text_dark</color>
+
+    <!--<color name="primary">#9C27B0</color>
+    <color name="primary_dark">#7B1FA2</color>-->
 </resources>

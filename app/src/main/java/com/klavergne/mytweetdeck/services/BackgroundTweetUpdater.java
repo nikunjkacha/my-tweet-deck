@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.klavergne.mytweetdeck.GetTweetsTask;
+import com.klavergne.mytweetdeck.tasks.GetTweetsTask;
 import com.klavergne.mytweetdeck.R;
 import com.klavergne.mytweetdeck.db.DbHelper;
 
@@ -73,10 +73,6 @@ public class BackgroundTweetUpdater extends Service {
     // Initializes twitter, if needed
     private Twitter getTwitter() {
         if (twitter == null) {
-            // TODO Fix case when login doesn't work
-            //String username = prefs.getString("username", null);
-            //String password = prefs.getString("password", null);
-
             twitter = TwitterFactory.getSingleton();
             twitter.setOAuthConsumer(getString(R.string.consumerKey), getString(R.string.consumerSecret));
             twitter.setOAuthAccessToken(new AccessToken(getString(R.string.accessToken), getString(R.string.accessTokenSecret)));
@@ -91,10 +87,10 @@ public class BackgroundTweetUpdater extends Service {
         static final long DELAY = 100000L; // 100 seconds
 
         public void run() {
-            Log.d(BackgroundTweetUpdater.TAG, "Updater ran.");
+            Log.d(BackgroundTweetUpdater.TAG, getString(R.string.log_updating_tweets));
 
             // get timeline in separate thread
-            new GetTweetsTask(this).execute(getTwitter());
+            new GetTweetsTask(this, getApplicationContext()).execute(getTwitter());
 
             // Set this to run again later
             handler.postDelayed(this, DELAY);
@@ -109,9 +105,8 @@ public class BackgroundTweetUpdater extends Service {
                 // Insert will throw exceptions for duplicate IDs
                 try {
                     result = db.insertOrThrow(DbHelper.TABLE, null, values);
-                    //Log.d(TAG, "Got status: " + status.toString());
                     if (result < 0) {
-                        Log.e(TAG, "Error inserting into db");
+                        Log.e(TAG, getString(R.string.log_db_insert_error));
                     }
                     insertCount++;
                 } catch (SQLiteConstraintException e) {
@@ -121,7 +116,7 @@ public class BackgroundTweetUpdater extends Service {
                     Log.e(TAG, e.getLocalizedMessage(), e);
                 }
             }
-            Log.d(TAG, String.format("Got %s tweets; inserted %s tweets into the database.", timeline.size(), insertCount));
+            Log.d(TAG, getString(R.string.log_inserted_tweets_into_db, timeline.size(), insertCount));
         }
     }
 }

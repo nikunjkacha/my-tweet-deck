@@ -13,9 +13,8 @@
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
         android:id="@+id/statusProfilePic"
@@ -26,7 +25,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
         android:textSize="12sp"
         android:text="@string/sample_fullname"
@@ -38,7 +36,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
         android:textSize="12sp"
         android:text="@string/sample_username"
@@ -53,19 +50,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/sample_time_ago"
         android:id="@+id/tweetHowLongAgo"
-        android:layout_alignParentEnd="true"
- />
-
-    <!--
-        android:layout_toEndOf="@id/statusProfileUserName"
-        android:layout_alignParentRight="true"
-        android:gravity="end"
-        android:textAlignment="gravity"
-        android:layout_alignStart="@id/statusProfileUserFullName"
-
-
-        android:layout_alignEnd="@id/tweetHowLongAgo"
-    -->
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"

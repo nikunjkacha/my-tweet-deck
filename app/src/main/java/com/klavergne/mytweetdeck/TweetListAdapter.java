@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.klavergne.mytweetdeck.tasks.DownloadImageTask;
+
 import java.util.List;
 
 import twitter4j.Status;

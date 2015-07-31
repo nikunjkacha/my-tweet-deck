@@ -5,28 +5,36 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.format.DateFormat;
-import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.klavergne.mytweetdeck.tasks.DownloadImageTask;
+import com.klavergne.mytweetdeck.tasks.FavoriteTweetTask;
+import com.klavergne.mytweetdeck.tasks.RetweetTask;
+import com.klavergne.mytweetdeck.tasks.UnfavoriteTweetTask;
 
 import java.util.Date;
 
 import twitter4j.Status;
+import twitter4j.Twitter;
 
-public class TweetFragment extends Fragment {
+public class TweetFragment extends Fragment implements RetweetTask.RetweetTaskCompleteListener, FavoriteTweetTask.FavoriteTweetTaskCompleteListener, UnfavoriteTweetTask.UnfavoriteTweetTaskCompleteListener {
 
     public static final String FRAGMENT_TAG = "tweet_fragement_detail";
     public static final String ARG_TWEET = "tweet";
-
-    private static final String TIME_DATE_SEPARATOR = " - ";
+    public static final String ARG_TWITTER = "twitter";
 
     java.text.DateFormat dateFormat = null;
     java.text.DateFormat timeFormat = null;
+
+    private Twitter twitter = null;
 
     private Status status;
 
@@ -38,6 +46,7 @@ public class TweetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         status = (Status) getArguments().getSerializable(ARG_TWEET);
+        twitter = (Twitter) getArguments().getSerializable(ARG_TWITTER);
 
         if (rootView == null) {
             // Inflate the layout for this fragment
@@ -56,6 +65,9 @@ public class TweetFragment extends Fragment {
         TextView tweetDateAndTime;
         TextView tweetRetweetCount;
         TextView tweetFavoritesCount;
+        Button rtButton;
+        Button favButton;
+        Switch favSwitch;
     }
 
     private ViewHolder holder;
@@ -70,6 +82,12 @@ public class TweetFragment extends Fragment {
             holder.tweetDateAndTime = (TextView) rootView.findViewById(R.id.tweetDateAndTime);
             holder.tweetRetweetCount = (TextView) rootView.findViewById(R.id.tweetRetweetCount);
             holder.tweetFavoritesCount = (TextView) rootView.findViewById(R.id.tweetFavoritesCount);
+            holder.rtButton = (Button) rootView.findViewById(R.id.retweetButton);
+            holder.favButton = (Button) rootView.findViewById(R.id.favoriteButton);
+            holder.rtButton.setOnClickListener(v -> retweet());
+            holder.favButton.setOnClickListener(v -> favorite());
+            holder.favSwitch = (Switch) rootView.findViewById(R.id.favSwitch);
+            holder.favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> changeFavoriteState(isChecked));
         }
 
         if (status != null) {
@@ -84,7 +102,18 @@ public class TweetFragment extends Fragment {
                 timeFormat = DateFormat.getTimeFormat(getActivity());
             }
             Date createdAt = status.getCreatedAt();
-            holder.tweetDateAndTime.setText(timeFormat.format(createdAt) + TIME_DATE_SEPARATOR + dateFormat.format(createdAt));
+            holder.tweetDateAndTime.setText(dateFormat.format(createdAt) + getString(R.string.time_date_separator) + timeFormat.format(createdAt));
+
+            if (status.isFavorited()) {
+                holder.favButton.setEnabled(false);
+                holder.favSwitch.setChecked(true);
+            } else {
+                holder.favButton.setEnabled(true);
+                holder.favSwitch.setChecked(false);
+            }
+            if (status.isRetweetedByMe()) {
+                holder.rtButton.setEnabled(false);
+            }
 
             new DownloadImageTask(holder.userProfilePic).execute(status.getUser().getProfileImageURLHttps());
         }
@@ -130,4 +159,44 @@ public class TweetFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    public void retweet() {
+        Log.d(this.getClass().getSimpleName(), getString(R.string.log_retweeting, status.getId()));
+        new RetweetTask(twitter, this).execute(status.getId());
+    }
+
+    public void favorite() {
+        Log.d(this.getClass().getSimpleName(), getString(R.string.log_favoriting_tweet, status.getId()));
+        new FavoriteTweetTask(twitter, this).execute(status.getId());
+    }
+
+    private void changeFavoriteState(boolean isChecked) {
+        Log.d(this.getClass().getSimpleName(), getString(R.string.log_favorite_state_change, isChecked, status.getId()));
+        //Log.d(this.getClass().getSimpleName(), "Changing favorite state to : " + isChecked + " for: " + status.getId());
+        if (isChecked) {
+            new FavoriteTweetTask(twitter, this).execute(status.getId());
+        } else {
+            new UnfavoriteTweetTask(twitter, this).execute(status.getId());
+        }
+    }
+
+    @Override
+    public void retweetComplete(Boolean success) {
+        if (!success) {
+            Toast.makeText(this.getActivity(), R.string.retweet_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void favoriteComplete(Boolean success) {
+        if (!success) {
+            Toast.makeText(this.getActivity(), R.string.favorite_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void unfavoriteComplete(Boolean success) {
+        if (!success) {
+            Toast.makeText(this.getActivity(), R.string.unfavorite_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
